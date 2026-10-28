@@ -91,7 +91,7 @@ message["subject"] = '[AI News_Contents] 오늘의 뉴스 요약 브리핑'
 
 
 message.attach(MIMEText(ai_summary, "plain", "utf-8"))
-print(sender_email, app_password)
+print("!!!!",sender_email, app_password)
 
 try:
     with smtplib.SMTP("smtp.gmail.com", 587) as server:
