@@ -91,12 +91,12 @@ message["subject"] = '[AI News_Contents] 오늘의 뉴스 요약 브리핑'
 
 
 message.attach(MIMEText(ai_summary, "plain", "utf-8"))
-
+print(sender_email, app_password)
 
 try:
     with smtplib.SMTP("smtp.gmail.com", 587) as server:
         server.starttls()
-        print(sender_email, app_password)
+        
         server.login(sender_email, app_password)
         server.sendmail(sender_email, receiver_email, message.as_string())
     print("이메일이 성공적으로 발송되었습니다. 메일함을 확인해주세요!")
