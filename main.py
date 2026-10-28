@@ -31,34 +31,20 @@ def clean_text(value):
 
 if soup:
     news_tag_2 = soup.find_all('p', class_='lead')
-    print(news_tag_2)
-    print(f"총 {len(news_tag_2)}개의 뉴스 기사를 수집했습니다.")
-    print(f"수집된 뉴스 기사 제목:")
-    print("-" * 50)
-    # ['new1','news2']
-    # [(0,'news1'),(1,'news2')]
     for i, tags in enumerate(news_tag_2[:10], start=1):
         headline = tags.get_text(strip=True)
         collected_headlines.append(headline)
-        print(f"{i}번 뉴스 기사 제목 수집 완료]")
-        print(f"제목: {headline}\n")
+
 else:
     print("대형 섹션 상자를 찾을 수 없습니다. 클래스 명을 재확인 해주세요.")
 
 
 if soup:
     news_tag_1 = soup.find_all('a', class_='news-tit')
-    print(news_tag_1)
-    print(f"총 {len(news_tag_1)}개의 뉴스 기사를 수집했습니다.")
-    print(f"수집된 뉴스 기사 제목:")
-    print("-" * 50)
-    # ['new1','news2']
-    # [(0,'news1'),(1,'news2')]
     for i, tags in enumerate(news_tag_1[:10], start=1):
         headline = tags.get_text(strip=True)
         collected_headlines.append(headline)
-        print(f"{i}번 뉴스 기사 제목 수집 완료]")
-        print(f"제목: {headline}\n")
+
 else:
     print("대형 섹션 상자를 찾을 수 없습니다. 클래스 명을 재확인 해주세요.")
 
@@ -66,13 +52,7 @@ else:
 news_data = "\n".join(collected_headlines, )
 
 
-print("-" * 50)
-print("[최종 수집 성공] 총 뉴스 기사 제목:")
-print(news_data)
-
-
-
-api_key = os.environ.get("Gemini_API_KEY") 
+api_key = os.environ.get("GEMINI_API_KEY") 
 client = genai.Client(api_key = api_key)
 
 
@@ -96,11 +76,12 @@ try:
     )
 
 except Exception as e:
-    print(f"구글 서버와 연결이  끊어졌습니다: {e}")
+    print(f"구글 서버와 연결이 끊어졌습니다: {e}")
 
 ai_summary = response.text
-sender_email = os.environ.get("email_addr") 
-app_password = os.environ.get("app_password") 
+print(response.text)
+sender_email = os.environ.get("SENDER_EMAIL") 
+app_password = os.environ.get("GMAIL_APP_PASSWORD") 
 receiver_email = sender_email
 
 message = MIMEMultipart()
@@ -115,6 +96,7 @@ message.attach(MIMEText(ai_summary, "plain", "utf-8"))
 try:
     with smtplib.SMTP("smtp.gmail.com", 587) as server:
         server.starttls()
+        print(sender_email, app_password)
         server.login(sender_email, app_password)
         server.sendmail(sender_email, receiver_email, message.as_string())
     print("이메일이 성공적으로 발송되었습니다. 메일함을 확인해주세요!")
