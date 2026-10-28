@@ -80,8 +80,8 @@ except Exception as e:
 
 ai_summary = response.text
 print(response.text)
-sender_email = os.environ.get("SENDER_EMAIL") 
-app_password = os.environ.get("GMAIL_APP_PASSWORD") 
+sender_email = os.environ.get("EMAIL_ADDR") 
+app_password = os.environ.get("APP_PASSWORD") 
 receiver_email = sender_email
 
 message = MIMEMultipart()
