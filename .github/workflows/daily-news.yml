@@ -1,0 +1,39 @@
+
+name: Daily AI News Briefing
+
+on:
+  schedule:
+    # 한국 시간 매일 오전 8시
+    - cron: '0 8 * * *'
+      timezone: "Asia/Seoul"
+
+  # GitHub에서 수동 실행도 가능
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  send-news:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run news briefing
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+          SENDER_EMAIL: ${{ secrets.SENDER_EMAIL }}
+        run: python main.py
